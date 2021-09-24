@@ -1,0 +1,16 @@
+endpoints:
+  prometheus:
+    sensitive: false
+micronaut:
+  application:
+    name: microstreamRestAPI
+micronaut:
+  server:
+    port: 8082
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        step: PT1M
+        descriptions: true
