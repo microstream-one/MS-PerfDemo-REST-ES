@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.microstream</groupId>
-	<artifactId>Microstream-Rest-API</artifactId>
+	<artifactId>pdesnode</artifactId>
 	<version>0.1</version>
 	<packaging>${packaging}</packaging>
 
@@ -15,8 +15,8 @@
 	</parent>
 	<properties>
 		<packaging>jar</packaging>
-		<jdk.version>21</jdk.version>
-		<release.version>21</release.version>
+		<jdk.version>17</jdk.version>
+		<release.version>17</release.version>
 		<micronaut.version>4.6.2</micronaut.version>
 		<micronaut.runtime>netty</micronaut.runtime>
 		<micronaut.aot.enabled>false</micronaut.aot.enabled>
@@ -32,6 +32,11 @@
 				<configuration>
 					<configFile>aot-${packaging}.properties</configFile>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.3.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -50,6 +55,17 @@
 							<groupId>io.micronaut</groupId>
 							<artifactId>micronaut-http-validation</artifactId>
 							<version>${micronaut.core.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut.micrometer</groupId>
+							<artifactId>micronaut-micrometer-annotation</artifactId>
+							<version>${micronaut.micrometer.version}</version>
+							<exclusions>
+								<exclusion>
+									<groupId>io.micronaut</groupId>
+									<artifactId>micronaut-inject</artifactId>
+								</exclusion>
+							</exclusions>
 						</path>
 						<path>
 							<groupId>io.micronaut.serde</groupId>
@@ -223,5 +239,28 @@
 			<artifactId>gigamap</artifactId>
 			<version>1.0.0-alpha5</version>
 		</dependency>
+
+		<!-- Micrometer for Exporting Prometheus Stats -->
+		<dependency>
+			<groupId>io.micronaut.micrometer</groupId>
+			<artifactId>micronaut-micrometer-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.micrometer</groupId>
+			<artifactId>micronaut-micrometer-observation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.micrometer</groupId>
+			<artifactId>micronaut-micrometer-observation-http</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.micrometer</groupId>
+			<artifactId>micronaut-micrometer-registry-prometheus</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-management</artifactId>
+		</dependency>
+
 	</dependencies>
 </project>

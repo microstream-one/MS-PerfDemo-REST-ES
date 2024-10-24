@@ -41,19 +41,12 @@ public class DAOBook extends ReadWriteLocked
 	
 	public List<Book> searchBooksTitle(String title)
 	{
-		this.read(() -> 
+		return this.read(() -> 
 		{
 			return rootProvider.root().gigaBooks
 				.query(BookIndices.titleIndex.contains(title))
-				.toList(1000);
-			
-//			try(Stream<Book> stream = query.stream())
-//			{
-//				return stream.limit(1000).collect(Collectors.toList());
-//			}			
+				.toList(1000);	
 		});
-		
-		return new ArrayList<Book>();
 	}
 	
 	public synchronized void insert(Book book)
