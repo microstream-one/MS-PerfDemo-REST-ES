@@ -11,16 +11,16 @@ import io.micronaut.serde.annotation.Serdeable;
 @Serdeable
 public class Book
 {
-	private final String	ISBN;
-	private final String	title;
-	private final LocalDate	publicationDate;
-	private final int		edition;
+	private String	ISBN;
+	private String	title;
+	private LocalDate	publicationDate;
+	private int		edition;
 	
 	private int				availableQuantity;
 	private BigDecimal		price;
 	
-	private final Author	author;
-	private final Publisher	publisher;
+	private Author	author;
+	private Publisher	publisher;
 	
 	public Book(DTOBook dto)
 	{
@@ -33,11 +33,15 @@ public class Book
 		this.availableQuantity = dto.availableQuantity();
 
 		this.price = new BigDecimal(dto.price());
-		this.author = new Author(dto.author().mail(), dto.author().firstname(), dto.author().lastname());
-		this.publisher = new Publisher(dto.publisher().mail(), dto.publisher().company());
+		this.author = new Author(dto.author().mail(), dto.author().firstname(), dto.author().lastname(), dto.author().addresses());
+		this.publisher = new Publisher(dto.publisher().mail(), dto.publisher().company(), dto.publisher().addresses());
 		
 	}
 	
+	public Book() {
+		super();
+	}
+
 	public int getAvailableQuantity()
 	{
 		return availableQuantity;
@@ -63,9 +67,19 @@ public class Book
 		return ISBN;
 	}
 	
+	public void setISBN(String isbn)
+	{
+		this.ISBN = isbn;
+	}
+	
 	public String getTitle()
 	{
 		return title;
+	}
+	
+	public void setTitle(String title)
+	{
+		this.title = title;
 	}
 	
 	public LocalDate getPublicationDate()
@@ -73,9 +87,19 @@ public class Book
 		return publicationDate;
 	}
 	
+	public void setPublicationDate(LocalDate publicationDate)
+	{
+		this.publicationDate = publicationDate;
+	}
+	
 	public int getEdition()
 	{
 		return edition;
+	}
+	
+	public void setEdition(int edition)
+	{
+		this.edition = edition;
 	}
 	
 	public Author getAuthor()
@@ -83,9 +107,19 @@ public class Book
 		return author;
 	}
 	
+	public void setAuthor(Author author)
+	{
+		this.author = author;
+	}
+	
 	public Publisher getPublisher()
 	{
 		return publisher;
+	}
+	
+	public void setPublisher(Publisher publisher)
+	{
+		this.publisher = publisher;
 	}
 	
 }

@@ -1,5 +1,7 @@
 package com.microstream.domain;
 
+import com.microstream.dto.DTOAddress;
+
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
@@ -22,6 +24,14 @@ public class Address
 		this.country = country;
 	}
 	
+	public Address(DTOAddress a) {
+		this.address = a.address();
+		this.address2 = a.address2();
+		this.city = a.city();
+		this.country = a.country();
+		this.zip = a.zip();
+	}
+
 	public String getAddress()
 	{
 		return address;

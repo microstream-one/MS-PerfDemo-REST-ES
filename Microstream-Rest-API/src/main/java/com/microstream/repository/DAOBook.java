@@ -49,6 +49,36 @@ public class DAOBook extends ReadWriteLocked
 		});
 	}
 	
+	public List<Book> searchAuthorsBooks(String name)
+	{
+		return this.read(() -> 
+		{
+			return rootProvider.root().gigaBooks
+				.query(BookIndices.authorFirstnameIndex.containsIgnoreCase(name).or(BookIndices.authorLastnameIndex.containsIgnoreCase(name)))
+				.toList(1000);	
+		});
+	}
+	
+	public List<Book> searchAuthorsBooksFirstnameOnly(String name)
+	{
+		return this.read(() -> 
+		{
+			return rootProvider.root().gigaBooks
+				.query(BookIndices.authorFirstnameIndex.containsIgnoreCase(name))
+				.toList(1000);	
+		});
+	}
+	
+	public List<Book> searchAuthorsBooksLastnameOnly(String name)
+	{
+		return this.read(() -> 
+		{
+			return rootProvider.root().gigaBooks
+				.query(BookIndices.authorLastnameIndex.containsIgnoreCase(name))
+				.toList(1000);	
+		});
+	}
+	
 	public synchronized void insert(Book book)
 	{
 		Root root = rootProvider.root();
@@ -89,5 +119,10 @@ public class DAOBook extends ReadWriteLocked
 		});
 		
 		return count.get();
+	}
+
+	public long getSize() {
+		// TODO Auto-generated method stub
+		return rootProvider.root().gigaBooks.size();
 	}
 }

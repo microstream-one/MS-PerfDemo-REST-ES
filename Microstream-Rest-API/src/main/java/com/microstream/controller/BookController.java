@@ -46,6 +46,24 @@ public class BookController
 		return dao.searchBooksTitle(searchTerm);
 	}
 	
+	@Get("/search/author/{name}")
+	List<Book> searchBookOfAuthor(@NonNull @NotBlank @PathVariable String name)
+	{
+		return dao.searchAuthorsBooks(name);
+	}
+	
+	@Get("/search/author/firstname/{name}")
+	List<Book> searchBookOfAuthorFirstname(@NonNull @NotBlank @PathVariable String name)
+	{
+		return dao.searchAuthorsBooksFirstnameOnly(name);
+	}
+	
+	@Get("/search/author/lastname/{name}")
+	List<Book> searchBookOfAuthorLastname(@NonNull @NotBlank @PathVariable String name)
+	{
+		return dao.searchAuthorsBooksLastnameOnly(name);
+	}
+	
 	@Get("/{isbn}")
 	Book getBook(@NonNull @NotBlank @PathVariable String isbn)
 	{

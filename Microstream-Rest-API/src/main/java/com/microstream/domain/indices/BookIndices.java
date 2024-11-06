@@ -49,4 +49,32 @@ public class BookIndices
 			return entity.getPublicationDate();
 		}
 	};
+	
+	public final static Indexer.AbstractString<Book> authorFirstnameIndex = new Indexer.AbstractString<>()
+	{
+		public String name()
+		{
+			return "authorFirstname";
+		}
+		
+		@Override
+		public String indexEntity(final Book entity)
+		{
+			return entity.getAuthor().getFirstname();
+		}
+	};
+	
+	public final static Indexer.AbstractString<Book> authorLastnameIndex = new Indexer.AbstractString<>()
+	{
+		public String name()
+		{
+			return "authorLastname";
+		}
+		
+		@Override
+		public String indexEntity(final Book entity)
+		{
+			return entity.getAuthor().getLastname();
+		}
+	};
 }

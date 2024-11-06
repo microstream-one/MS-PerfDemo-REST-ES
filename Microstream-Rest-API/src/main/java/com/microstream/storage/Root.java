@@ -31,6 +31,8 @@ public class Root
 		indices.add(BookIndices.titleIndex);
 		indices.add(BookIndices.ISBNIndex);
 		indices.add(BookIndices.pubDateIndex);
+		indices.add(BookIndices.authorFirstnameIndex);
+		indices.add(BookIndices.authorLastnameIndex);
 		indices.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
 	}
 		

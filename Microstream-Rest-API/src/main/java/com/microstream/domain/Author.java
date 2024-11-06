@@ -1,5 +1,10 @@
 package com.microstream.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.microstream.dto.DTOAddress;
+
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
@@ -9,13 +14,21 @@ public class Author
 	private String			mail;
 	private String			firstname;
 	private String			lastname;
+	private List<Address> 	addresses;
 	
-	public Author(String mail, String firstname, String lastname)
+	public Author(String mail, String firstname, String lastname, List<DTOAddress> addresses)
 	{
 		super();
 		this.mail = mail;
 		this.firstname = firstname;
 		this.lastname = lastname;
+		
+		List<Address> add = new ArrayList<>();
+		addresses.forEach(a -> {
+			add.add(new Address(a));
+		});
+		
+		this.addresses = add;
 	}
 	
 	public String getMail()
@@ -51,6 +64,14 @@ public class Author
 	public String getUUID()
 	{
 		return UUID;
+	}
+
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
 	}
 	
 }
