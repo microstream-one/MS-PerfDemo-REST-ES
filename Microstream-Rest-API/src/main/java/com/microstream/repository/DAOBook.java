@@ -2,6 +2,7 @@ package com.microstream.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,6 +29,8 @@ public class DAOBook extends ReadWriteLocked
 	private final StorageManager	manager;
 	private int						storeCount	= 0;
 	
+	private int						LIST_LIMIT = 100;
+	
 	DAOBook(final RootProvider<Root> rootProvider, final StorageManager manager)
 	{
 		this.rootProvider = rootProvider;
@@ -36,16 +39,22 @@ public class DAOBook extends ReadWriteLocked
 	
 	public Book getBookISBN(String isbn)
 	{
-		return rootProvider.root().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().get();
+		return rootProvider.root().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().orElse(null);
 	}
 	
 	public List<Book> searchBooksTitle(String title)
 	{
 		return this.read(() -> 
 		{
-			return rootProvider.root().gigaBooks
-				.query(BookIndices.titleIndex.contains(title))
-				.toList(1000);	
+			GigaQuery<Book> items = rootProvider.root().gigaBooks
+				.query(BookIndices.titleIndex.containsIgnoreCase(title));
+			
+			if(items.count() > 0)
+			{
+				return items.toList(LIST_LIMIT);
+			}
+			
+			return new ArrayList<>();
 		});
 	}
 	
@@ -53,9 +62,15 @@ public class DAOBook extends ReadWriteLocked
 	{
 		return this.read(() -> 
 		{
-			return rootProvider.root().gigaBooks
-				.query(BookIndices.authorFirstnameIndex.containsIgnoreCase(name).or(BookIndices.authorLastnameIndex.containsIgnoreCase(name)))
-				.toList(1000);	
+			GigaQuery<Book> items = rootProvider.root().gigaBooks
+				.query(BookIndices.authorFirstnameIndex.containsIgnoreCase(name).or(BookIndices.authorLastnameIndex.containsIgnoreCase(name)));	
+		
+			if(items.count() > 0)
+			{
+				return items.toList(LIST_LIMIT);
+			}
+			
+			return new ArrayList<>();
 		});
 	}
 	
@@ -63,9 +78,15 @@ public class DAOBook extends ReadWriteLocked
 	{
 		return this.read(() -> 
 		{
-			return rootProvider.root().gigaBooks
-				.query(BookIndices.authorFirstnameIndex.containsIgnoreCase(name))
-				.toList(1000);	
+			GigaQuery<Book> items = rootProvider.root().gigaBooks
+				.query(BookIndices.authorFirstnameIndex.containsIgnoreCase(name));	
+			
+			if(items.count() > 0)
+			{
+				return items.toList(LIST_LIMIT);
+			}
+			
+			return new ArrayList<>();
 		});
 	}
 	
@@ -73,9 +94,15 @@ public class DAOBook extends ReadWriteLocked
 	{
 		return this.read(() -> 
 		{
-			return rootProvider.root().gigaBooks
-				.query(BookIndices.authorLastnameIndex.containsIgnoreCase(name))
-				.toList(1000);	
+			GigaQuery<Book> items = rootProvider.root().gigaBooks
+				.query(BookIndices.authorLastnameIndex.containsIgnoreCase(name));	
+			
+			if(items.count() > 0)
+			{
+				return items.toList(LIST_LIMIT);
+			}
+			
+			return new ArrayList<>();
 		});
 	}
 	
