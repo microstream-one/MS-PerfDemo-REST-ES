@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 
 
 @Observed
-@Controller("/gigaBooks")
+@Controller("/books")
 public class BookController
 {
 	private final DAOBook dao;
