@@ -49,10 +49,10 @@ public class BookController
 		return dao.searchBooksTitle(searchTerm);
 	}
 	
-	@Get("/search/author/{name}")
-	List<Book> searchBookOfAuthor(@NonNull @NotBlank @PathVariable String name)
+	@Get("/search/author/{mail}")
+	List<Book> searchBookOfAuthor(@NonNull @NotBlank @PathVariable String mail)
 	{
-		return dao.searchAuthorsBooks(name);
+		return dao.searchAuthorsBooks(mail);
 	}
 	
 	@Get("/search/author/firstname/{name}")

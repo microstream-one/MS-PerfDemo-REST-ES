@@ -58,12 +58,12 @@ public class DAOBook extends ReadWriteLocked
 		});
 	}
 	
-	public List<Book> searchAuthorsBooks(String name)
+	public List<Book> searchAuthorsBooks(String mail)
 	{
 		return this.read(() -> 
 		{
 			GigaQuery<Book> items = rootProvider.root().gigaBooks
-				.query(BookIndices.authorFirstnameIndex.containsIgnoreCase(name).or(BookIndices.authorLastnameIndex.containsIgnoreCase(name)));	
+				.query(BookIndices.authorEmailIndex.is(mail));	
 		
 			if(items.count() > 0)
 			{

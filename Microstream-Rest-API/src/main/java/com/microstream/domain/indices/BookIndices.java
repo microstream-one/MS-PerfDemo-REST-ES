@@ -50,6 +50,20 @@ public class BookIndices
 		}
 	};
 	
+	public final static Indexer.AbstractString<Book> authorEmailIndex = new Indexer.AbstractString<>()
+	{
+		public String name()
+		{
+			return "authorEmail";
+		}
+		
+		@Override
+		public String indexEntity(final Book entity)
+		{
+			return entity.getAuthor().getMail();
+		}
+	};
+	
 	public final static Indexer.AbstractString<Book> authorFirstnameIndex = new Indexer.AbstractString<>()
 	{
 		public String name()

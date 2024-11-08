@@ -33,6 +33,7 @@ public class Root
 		indices.add(BookIndices.pubDateIndex);
 		indices.add(BookIndices.authorFirstnameIndex);
 		indices.add(BookIndices.authorLastnameIndex);
+		indices.add(BookIndices.authorEmailIndex);
 		indices.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
 	}
 		
