@@ -3,8 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.microstream</groupId>
-	<artifactId>pdesnode</artifactId>
+	<groupId>one.microstream</groupId>
+	<artifactId>microstream-eclipsestore-book-demo-server</artifactId>
 	<version>0.1</version>
 	<packaging>${packaging}</packaging>
 
@@ -40,7 +40,7 @@
                 <version>3.3.2</version>
                 <configuration>
                     <to>
-                        <image>eclipsestore-server</image>
+                        <image>microstream-eclipsestore-book-demo-server</image>
                         <tags>
                             <tag>${project.version}</tag>
                         </tags>
