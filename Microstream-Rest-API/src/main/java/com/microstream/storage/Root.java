@@ -4,7 +4,6 @@ package com.microstream.storage;
 import java.util.Arrays;
 
 import com.microstream.domain.Book;
-import com.microstream.domain.Books;
 import com.microstream.domain.indices.BookIndices;
 
 import io.micronaut.serde.annotation.Serdeable;
@@ -20,8 +19,8 @@ import one.microstream.gigamap.GigaMap;
 @Serdeable
 public class Root
 {
-	public GigaMap<Book>	gigaBooks	= GigaMap.New();
-	public Books			books		= new Books();
+	public GigaMap<Book>	gigaBooks			= GigaMap.New();
+	public GigaMap<Book>	gigaBooksForInsert	= GigaMap.New();
 	
 	public Root()
 	{
@@ -35,8 +34,17 @@ public class Root
 		indices.add(BookIndices.authorLastnameIndex);
 		indices.add(BookIndices.authorEmailIndex);
 		indices.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
-	}
 		
+		final BitmapIndices<Book> indicesForInsert = gigaBooksForInsert.index().bitmap();
+		indicesForInsert.add(BookIndices.titleIndex);
+		indicesForInsert.add(BookIndices.ISBNIndex);
+		indicesForInsert.add(BookIndices.pubDateIndex);
+		indicesForInsert.add(BookIndices.authorFirstnameIndex);
+		indicesForInsert.add(BookIndices.authorLastnameIndex);
+		indicesForInsert.add(BookIndices.authorEmailIndex);
+		indicesForInsert.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
+	}
+	
 	public GigaMap<Book> getGigaBooks()
 	{
 		return gigaBooks;
@@ -46,17 +54,15 @@ public class Root
 	{
 		this.gigaBooks = gigaBooks;
 	}
-
-	public Books getBooks()
+	
+	public GigaMap<Book> getGigaBooksForInsert()
 	{
-		return books;
-	}
-
-	public void setBooks(Books books)
-	{
-		this.books = books;
+		return gigaBooksForInsert;
 	}
 	
-	
+	public void setGigaBooksForInsert(GigaMap<Book> gigaBooksForInsert)
+	{
+		this.gigaBooksForInsert = gigaBooksForInsert;
+	}
 	
 }

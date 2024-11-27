@@ -34,35 +34,14 @@ public class LazyBookController
 		this.dao = dao;
 	}
 	
-	@Get("/countIndices")
-	HttpResponse<Integer> countIndices()
-	{
-		return HttpResponse.ok(dao.countIndices());
-	}
-	
 	@Get("/search/{searchTerm}")
 	HttpResponse<List<Book>> searchBook(@NonNull @NotBlank @PathVariable String searchTerm)
 	{
-		try
-		{
-			return HttpResponse.ok(dao.booksByTitle(searchTerm));
-		}
-		catch(IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return HttpResponse.notFound();
-		}
-		catch(ParseException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return HttpResponse.serverError();
-		}
+		return HttpResponse.ok(dao.booksByTitle(searchTerm));
 	}
 	
 	@Get("/{isbn}")
-	List<Book> getBookByISBN(@NonNull @NotBlank @PathVariable String isbn)
+	Book getBookByISBN(@NonNull @NotBlank @PathVariable String isbn)
 	{
 		return dao.booksByISBN(isbn);
 	}

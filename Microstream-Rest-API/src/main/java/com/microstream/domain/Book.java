@@ -11,37 +11,42 @@ import io.micronaut.serde.annotation.Serdeable;
 @Serdeable
 public class Book
 {
-	private String	ISBN;
-	private String	title;
+	private String		ISBN;
+	private String		title;
 	private LocalDate	publicationDate;
-	private int		edition;
+	private int			edition;
 	
-	private int				availableQuantity;
-	private BigDecimal		price;
+	private int			availableQuantity;
+	private BigDecimal	price;
 	
-	private Author	author;
+	private Author		author;
 	private Publisher	publisher;
 	
 	public Book(DTOBook dto)
 	{
 		super();
 		
-		this.ISBN = dto.ISBN();
+		this.ISBN = dto.isbn();
 		this.title = dto.title();
 		this.publicationDate = dto.publicationDate();
 		this.edition = dto.edition();
 		this.availableQuantity = dto.availableQuantity();
-
+		
 		this.price = new BigDecimal(dto.price());
-		this.author = new Author(dto.author().mail(), dto.author().firstname(), dto.author().lastname(), dto.author().addresses());
+		this.author = new Author(
+			dto.author().mail(),
+			dto.author().firstname(),
+			dto.author().lastname(),
+			dto.author().addresses());
 		this.publisher = new Publisher(dto.publisher().mail(), dto.publisher().company(), dto.publisher().addresses());
 		
 	}
 	
-	public Book() {
+	public Book()
+	{
 		super();
 	}
-
+	
 	public int getAvailableQuantity()
 	{
 		return availableQuantity;

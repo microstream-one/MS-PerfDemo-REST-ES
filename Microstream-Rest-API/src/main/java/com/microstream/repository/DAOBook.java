@@ -1,6 +1,7 @@
 package com.microstream.repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,6 +20,8 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.eclipsestore.RootProvider;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
+import one.microstream.gigamap.BitmapIndices;
+import one.microstream.gigamap.GigaMap;
 import one.microstream.gigamap.GigaQuery;
 
 
@@ -27,9 +30,9 @@ public class DAOBook extends ReadWriteLocked
 {
 	public final RootProvider<Root>	rootProvider;
 	private final StorageManager	manager;
-	private int						storeCount	= 0;
 	
-	private int						LIST_LIMIT = 100;
+	private int						LIST_LIMIT	= 1000;
+	private int						storeCount	= 1000;
 	
 	DAOBook(final RootProvider<Root> rootProvider, final StorageManager manager)
 	{
@@ -37,65 +40,17 @@ public class DAOBook extends ReadWriteLocked
 		this.manager = manager;
 	}
 	
-	public Book getBookISBN(String isbn)
+	public Book getBookByISBN(String isbn)
 	{
 		return rootProvider.root().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().orElse(null);
 	}
 	
-	public List<Book> searchBooksTitle(String title)
+	public List<Book> searchBooksByTitle(String title)
 	{
-		return this.read(() -> 
+		return this.read(() ->
 		{
-			GigaQuery<Book> items = rootProvider.root().gigaBooks
-				.query(BookIndices.titleIndex.containsIgnoreCase(title));
-			
-			if(items.count() > 0)
-			{
-				return items.toList(LIST_LIMIT);
-			}
-			
-			return new ArrayList<>();
-		});
-	}
-	
-	public List<Book> searchAuthorsBooks(String mail)
-	{
-		return this.read(() -> 
-		{
-			GigaQuery<Book> items = rootProvider.root().gigaBooks
-				.query(BookIndices.authorEmailIndex.is(mail));	
-		
-			if(items.count() > 0)
-			{
-				return items.toList(LIST_LIMIT);
-			}
-			
-			return new ArrayList<>();
-		});
-	}
-	
-	public List<Book> searchAuthorsBooksFirstnameOnly(String name)
-	{
-		return this.read(() -> 
-		{
-			GigaQuery<Book> items = rootProvider.root().gigaBooks
-				.query(BookIndices.authorFirstnameIndex.containsIgnoreCase(name));	
-			
-			if(items.count() > 0)
-			{
-				return items.toList(LIST_LIMIT);
-			}
-			
-			return new ArrayList<>();
-		});
-	}
-	
-	public List<Book> searchAuthorsBooksLastnameOnly(String name)
-	{
-		return this.read(() -> 
-		{
-			GigaQuery<Book> items = rootProvider.root().gigaBooks
-				.query(BookIndices.authorLastnameIndex.containsIgnoreCase(name));	
+			GigaQuery<Book> items =
+				rootProvider.root().gigaBooks.query(BookIndices.titleIndex.containsIgnoreCase(title));
 			
 			if(items.count() > 0)
 			{
@@ -114,42 +69,45 @@ public class DAOBook extends ReadWriteLocked
 		
 		this.write(() ->
 		{
-			if(storeCount > 1000)
-			{
-				root.gigaBooks.store();
-				storeCount = 0;
-			}
-			else
-			{
-				storeCount++;
-			}
+			root.gigaBooks.store();
 		});
 	}
 	
-	public List<Book> pageBooks(@NonNull @NotBlank int limit)
+	public synchronized void insertBatch(List<Book> books)
 	{
 		Root root = rootProvider.root();
 		
-		try(Stream<Book> stream = root.gigaBooks.query().stream())
+		this.write(() ->
 		{
-			return stream.limit(limit).collect(Collectors.toList());
-		}
+			root.gigaBooks.addAll(books);
+			root.gigaBooks.store();
+		});
 	}
 	
-	public Long countBooks()
+	public long countBooks()
 	{
-		AtomicLong count = new AtomicLong();
-		
-		this.read(() -> 
-		{
-			count.addAndGet(rootProvider.root().gigaBooks.query().count());
-		});
-		
-		return count.get();
-	}
-
-	public long getSize() {
 		// TODO Auto-generated method stub
 		return rootProvider.root().gigaBooks.size();
+	}
+	
+	public void flushBooks()
+	{
+		Root root = rootProvider.root();
+		
+		this.write(() ->
+		{
+			root.gigaBooks = GigaMap.New();
+			
+			final BitmapIndices<Book> indices = root.gigaBooks.index().bitmap();
+			indices.add(BookIndices.titleIndex);
+			indices.add(BookIndices.ISBNIndex);
+			indices.add(BookIndices.pubDateIndex);
+			indices.add(BookIndices.authorFirstnameIndex);
+			indices.add(BookIndices.authorLastnameIndex);
+			indices.add(BookIndices.authorEmailIndex);
+			indices.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
+			
+			manager.store(root);
+		});
 	}
 }
