@@ -73,6 +73,18 @@ public class DAOBook extends ReadWriteLocked
 		});
 	}
 	
+	public synchronized void insertForPM(Book book)
+	{
+		Root root = rootProvider.root();
+		
+		root.gigaBooksForInsert.add(book);
+		
+		this.write(() ->
+		{
+			root.gigaBooksForInsert.store();
+		});
+	}
+	
 	public synchronized void insertBatch(List<Book> books)
 	{
 		Root root = rootProvider.root();
@@ -109,5 +121,27 @@ public class DAOBook extends ReadWriteLocked
 			
 			manager.store(root);
 		});
+	}
+	
+	public void flushInsertPM()
+	{
+		Root root = rootProvider.root();
+		
+		this.write(() ->
+		{
+			root.gigaBooksForInsert = GigaMap.New();
+			
+			final BitmapIndices<Book> indices = root.gigaBooksForInsert.index().bitmap();
+			indices.add(BookIndices.titleIndex);
+			indices.add(BookIndices.ISBNIndex);
+			indices.add(BookIndices.pubDateIndex);
+			indices.add(BookIndices.authorFirstnameIndex);
+			indices.add(BookIndices.authorLastnameIndex);
+			indices.add(BookIndices.authorEmailIndex);
+			indices.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
+			
+			manager.store(root);
+		});
+		
 	}
 }

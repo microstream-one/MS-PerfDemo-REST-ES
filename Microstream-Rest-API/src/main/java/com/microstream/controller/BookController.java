@@ -61,6 +61,14 @@ public class BookController
 		return HttpResponse.ok("Successfully created");
 	}
 	
+	@Put("/insertPM")
+	HttpResponse<String> createInsertPM(@NonNull @Valid @Body DTOBook dto)
+	{
+		dao.insertForPM(new Book(dto));
+		
+		return HttpResponse.ok("Successfully created");
+	}
+	
 	@Put("/batch")
 	HttpResponse<String> createBatch(@NotEmpty @Body List<@Valid @NonNull DTOBook> dto)
 	{
@@ -75,6 +83,14 @@ public class BookController
 	HttpResponse<String> flushDatabase()
 	{
 		dao.flushBooks();
+		
+		return HttpResponse.ok("Data successfully deleted"); 
+	}
+	
+	@Delete("/flushinsertPM")
+	HttpResponse<String> flushInsertPM()
+	{
+		dao.flushInsertPM();
 		
 		return HttpResponse.ok("Data successfully deleted"); 
 	}
