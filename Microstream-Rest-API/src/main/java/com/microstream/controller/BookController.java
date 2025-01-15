@@ -41,6 +41,12 @@ public class BookController
 		return HttpResponse.ok(dao.countBooks());
 	}
 	
+	@Get("/countInsertPM")
+	HttpResponse<Long> countBooksInsertPM()
+	{
+		return HttpResponse.ok(dao.countBooksInsertPM());
+	}
+	
 	@Get("/search/{searchTerm}")
 	List<Book> searchBook(@NonNull @NotBlank @PathVariable String searchTerm)
 	{

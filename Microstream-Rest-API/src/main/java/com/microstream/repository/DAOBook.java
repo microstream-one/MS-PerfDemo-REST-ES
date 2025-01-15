@@ -102,6 +102,12 @@ public class DAOBook extends ReadWriteLocked
 		return rootProvider.root().gigaBooks.size();
 	}
 	
+	public long countBooksInsertPM()
+	{
+		// TODO Auto-generated method stub
+		return rootProvider.root().gigaBooksForInsert.size();
+	}
+	
 	public void flushBooks()
 	{
 		Root root = rootProvider.root();
