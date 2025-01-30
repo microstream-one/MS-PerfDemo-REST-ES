@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>one.microstream</groupId>
-	<artifactId>microstream-eclipsestore-book-demo-server</artifactId>
-	<version>1.0.3</version>
+	<artifactId>perfdemo-es-rest-proxy</artifactId>
+	<version>1.0.4</version>
 	<packaging>${packaging}</packaging>
 
 	<parent>
@@ -40,7 +40,7 @@
                 <version>3.3.2</version>
                 <configuration>
                     <to>
-                        <image>microstream-eclipsestore-book-demo-server</image>
+                        <image>perfdemo-es-rest-proxy</image>
                         <tags>
                             <tag>${project.version}</tag>
                         </tags>
