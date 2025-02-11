@@ -4,11 +4,12 @@ import java.time.LocalDate;
 
 import com.microstream.domain.Book;
 
-import one.microstream.gigamap.Indexer;
+import one.microstream.gigamap.IndexerLocalDate;
+import one.microstream.gigamap.IndexerString;
 
 public class BookIndices
 {
-	public final static Indexer.AbstractString<Book> ISBNIndex = new Indexer.AbstractString<>()
+	public final static IndexerString<Book> ISBNIndex = new IndexerString.Abstract<Book>()
 	{
 		public String name()
 		{
@@ -16,13 +17,13 @@ public class BookIndices
 		}
 		
 		@Override
-		public String indexEntity(final Book entity)
+		public String getString(final Book entity)
 		{
 			return entity.getISBN();
 		}
 	};
 	
-	public final static Indexer.AbstractString<Book> titleIndex = new Indexer.AbstractString<>()
+	public final static IndexerString<Book> titleIndex = new IndexerString.Abstract<Book>()
 	{
 		public String name()
 		{
@@ -30,13 +31,13 @@ public class BookIndices
 		}
 		
 		@Override
-		public String indexEntity(final Book entity)
+		public String getString(final Book entity)
 		{
 			return entity.getTitle();
 		}
 	};
 	
-	public final static Indexer.AbstractLocalDate<Book> pubDateIndex = new Indexer.AbstractLocalDate<>()
+	public final static IndexerLocalDate<Book> pubDateIndex = new IndexerLocalDate.Abstract<Book>()
 	{
 		public String name()
 		{
@@ -44,13 +45,13 @@ public class BookIndices
 		}
 		
 		@Override
-		protected LocalDate getDate(final Book entity)
+		protected LocalDate getLocalDate(final Book entity)
 		{
 			return entity.getPublicationDate();
 		}
 	};
 	
-	public final static Indexer.AbstractString<Book> authorEmailIndex = new Indexer.AbstractString<>()
+	public final static IndexerString<Book> authorEmailIndex = new IndexerString.Abstract<Book>()
 	{
 		public String name()
 		{
@@ -58,13 +59,13 @@ public class BookIndices
 		}
 		
 		@Override
-		public String indexEntity(final Book entity)
+		public String getString(final Book entity)
 		{
 			return entity.getAuthor().getMail();
 		}
 	};
 	
-	public final static Indexer.AbstractString<Book> authorFirstnameIndex = new Indexer.AbstractString<>()
+	public final static IndexerString<Book> authorFirstnameIndex = new IndexerString.Abstract<Book>()
 	{
 		public String name()
 		{
@@ -72,13 +73,13 @@ public class BookIndices
 		}
 		
 		@Override
-		public String indexEntity(final Book entity)
+		public String getString(final Book entity)
 		{
 			return entity.getAuthor().getFirstname();
 		}
 	};
 	
-	public final static Indexer.AbstractString<Book> authorLastnameIndex = new Indexer.AbstractString<>()
+	public final static IndexerString<Book> authorLastnameIndex = new IndexerString.Abstract<Book>()
 	{
 		public String name()
 		{
@@ -86,7 +87,7 @@ public class BookIndices
 		}
 		
 		@Override
-		public String indexEntity(final Book entity)
+		public String getString(final Book entity)
 		{
 			return entity.getAuthor().getLastname();
 		}

@@ -103,7 +103,7 @@
 		</repository>
 		<repository>
 			<id>gigamap-beta</id>
-			<url>https://repo.microstream.one/repository/maven-gigamap-beta/</url>
+			<url>https://repo.microstream.one/repository/maven-enterprise-edition-beta/</url>
 		</repository>
 		<repository>
 			<id>ossrh-snapshots</id>
@@ -236,7 +236,7 @@
 		<dependency>
 			<groupId>one.microstream</groupId>
 			<artifactId>gigamap</artifactId>
-			<version>1.0.0-beta1</version>
+			<version>1.0.0-beta2</version>
 		</dependency>
 
 		<!-- Micrometer for Exporting Prometheus Stats -->

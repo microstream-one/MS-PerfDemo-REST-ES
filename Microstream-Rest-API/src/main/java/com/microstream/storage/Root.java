@@ -1,8 +1,6 @@
 
 package com.microstream.storage;
 
-import java.util.Arrays;
-
 import com.microstream.domain.Book;
 import com.microstream.domain.indices.BookIndices;
 
@@ -33,7 +31,7 @@ public class Root
 		indices.add(BookIndices.authorFirstnameIndex);
 		indices.add(BookIndices.authorLastnameIndex);
 		indices.add(BookIndices.authorEmailIndex);
-		indices.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
+		indices.setIdentityIndices(BookIndices.ISBNIndex);
 		
 		final BitmapIndices<Book> indicesForInsert = gigaBooksForInsert.index().bitmap();
 		indicesForInsert.add(BookIndices.titleIndex);
@@ -42,7 +40,7 @@ public class Root
 		indicesForInsert.add(BookIndices.authorFirstnameIndex);
 		indicesForInsert.add(BookIndices.authorLastnameIndex);
 		indicesForInsert.add(BookIndices.authorEmailIndex);
-		indicesForInsert.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
+		indicesForInsert.setIdentityIndices(BookIndices.ISBNIndex);
 	}
 	
 	public GigaMap<Book> getGigaBooks()

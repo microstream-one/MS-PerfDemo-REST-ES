@@ -1,14 +1,8 @@
 package com.microstream.repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.eclipse.serializer.collections.Empty;
 import org.eclipse.store.storage.types.StorageManager;
 
 import com.microstream.concurrent.ReadWriteLocked;
@@ -16,10 +10,8 @@ import com.microstream.domain.Book;
 import com.microstream.domain.indices.BookIndices;
 import com.microstream.storage.Root;
 
-import io.micronaut.core.annotation.NonNull;
 import io.micronaut.eclipsestore.RootProvider;
 import jakarta.inject.Singleton;
-import jakarta.validation.constraints.NotBlank;
 import one.microstream.gigamap.BitmapIndices;
 import one.microstream.gigamap.GigaMap;
 import one.microstream.gigamap.GigaQuery;
@@ -123,7 +115,7 @@ public class DAOBook extends ReadWriteLocked
 			indices.add(BookIndices.authorFirstnameIndex);
 			indices.add(BookIndices.authorLastnameIndex);
 			indices.add(BookIndices.authorEmailIndex);
-			indices.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
+			indices.setIdentityIndices(BookIndices.ISBNIndex);
 			
 			manager.store(root);
 		});
@@ -144,7 +136,7 @@ public class DAOBook extends ReadWriteLocked
 			indices.add(BookIndices.authorFirstnameIndex);
 			indices.add(BookIndices.authorLastnameIndex);
 			indices.add(BookIndices.authorEmailIndex);
-			indices.setIdentityIndices(Arrays.asList(BookIndices.ISBNIndex));
+			indices.setIdentityIndices(BookIndices.ISBNIndex);
 			
 			manager.store(root);
 		});
