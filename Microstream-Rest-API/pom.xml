@@ -11,13 +11,13 @@
 	<parent>
 		<groupId>io.micronaut.platform</groupId>
 		<artifactId>micronaut-parent</artifactId>
-		<version>4.6.2</version>
+		<version>4.10.2</version>
 	</parent>
 	<properties>
 		<packaging>jar</packaging>
-		<jdk.version>17</jdk.version>
-		<release.version>17</release.version>
-		<micronaut.version>4.6.2</micronaut.version>
+		<jdk.version>21</jdk.version>
+		<release.version>21</release.version>
+		<micronaut.version>4.10.2</micronaut.version>
 		<micronaut.runtime>netty</micronaut.runtime>
 		<micronaut.aot.enabled>false</micronaut.aot.enabled>
 		<micronaut.aot.packageName>one.microstream.aot.generated</micronaut.aot.packageName>
@@ -119,6 +119,21 @@
 
 	<dependencies>
 		<dependency>
+            <groupId>org.eclipse.store</groupId>
+            <artifactId>storage-embedded-configuration</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.store</groupId>
+            <artifactId>storage-embedded</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+			<groupId>org.eclipse.store</groupId>
+			<artifactId>gigamap</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<dependency>
 			<groupId>io.micronaut</groupId>
 			<artifactId>micronaut-http-server-netty</artifactId>
 			<scope>compile</scope>
@@ -177,67 +192,6 @@
 			<version>1.1.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>io.micronaut.eclipsestore</groupId>
-			<artifactId>micronaut-eclipsestore-annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.micronaut.eclipsestore</groupId>
-			<artifactId>micronaut-eclipsestore</artifactId>
-
-			<exclusions>
-				<exclusion>
-					<groupId>org.eclipse.serializer</groupId>
-					<artifactId>serializer</artifactId>
-				</exclusion>
-
-				<exclusion>
-					<groupId>org.eclipse.store</groupId>
-					<artifactId>storage-embedded-configuration</artifactId>
-				</exclusion>
-
-				<exclusion>
-					<groupId>org.eclipse.serializer</groupId>
-					<artifactId>persistence-binary-jdk8</artifactId>
-				</exclusion>
-
-				<exclusion>
-					<groupId>org.eclipse.serializer</groupId>
-					<artifactId>persistence-binary-jdk17</artifactId>
-				</exclusion>
-
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.store</groupId>
-			<artifactId>storage-embedded-configuration</artifactId>
-			<version>2.1.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.serializer</groupId>
-			<artifactId>persistence-binary-jdk8</artifactId>
-			<version>2.1.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.serializer</groupId>
-			<artifactId>persistence-binary-jdk17</artifactId>
-			<version>2.1.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.store</groupId>
-			<artifactId>storage-embedded</artifactId>
-			<version>2.1.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>one.microstream</groupId>
-			<artifactId>gigamap</artifactId>
-			<version>1.0.0-beta2</version>
-		</dependency>
 
 		<!-- Micrometer for Exporting Prometheus Stats -->
 		<dependency>

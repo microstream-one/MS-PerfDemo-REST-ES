@@ -8,7 +8,6 @@ import com.microstream.dto.DTOBook;
 import com.microstream.repository.DAOBook;
 
 import io.micrometer.observation.annotation.Observed;
-import io.micronaut.core.annotation.Blocking;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
@@ -16,12 +15,10 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
-import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import one.microstream.gigamap.GigaMap;
 
 
 @Observed

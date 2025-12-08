@@ -1,12 +1,13 @@
 
 package com.microstream.storage;
 
+import org.eclipse.store.gigamap.types.BitmapIndices;
+import org.eclipse.store.gigamap.types.GigaMap;
+
 import com.microstream.domain.Book;
 import com.microstream.domain.indices.BookIndices;
 
 import io.micronaut.serde.annotation.Serdeable;
-import one.microstream.gigamap.BitmapIndices;
-import one.microstream.gigamap.GigaMap;
 
 
 /**

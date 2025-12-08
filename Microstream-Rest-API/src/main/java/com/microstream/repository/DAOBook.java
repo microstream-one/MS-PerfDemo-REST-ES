@@ -3,38 +3,32 @@ package com.microstream.repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.store.storage.types.StorageManager;
+import org.eclipse.store.gigamap.types.BitmapIndices;
+import org.eclipse.store.gigamap.types.GigaMap;
+import org.eclipse.store.gigamap.types.GigaQuery;
 
 import com.microstream.concurrent.ReadWriteLocked;
 import com.microstream.domain.Book;
 import com.microstream.domain.indices.BookIndices;
 import com.microstream.storage.Root;
+import com.microstream.storage.StorageServiceImpl;
 
-import io.micronaut.eclipsestore.RootProvider;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import one.microstream.gigamap.BitmapIndices;
-import one.microstream.gigamap.GigaMap;
-import one.microstream.gigamap.GigaQuery;
 
 
 @Singleton
 public class DAOBook extends ReadWriteLocked
 {
-	public final RootProvider<Root>	rootProvider;
-	private final StorageManager	manager;
-	
+	@Inject private StorageServiceImpl storageService;
+		
 	private int						LIST_LIMIT	= 1000;
 	private int						storeCount	= 1000;
 	
-	DAOBook(final RootProvider<Root> rootProvider, final StorageManager manager)
-	{
-		this.rootProvider = rootProvider;
-		this.manager = manager;
-	}
-	
 	public Book getBookByISBN(String isbn)
 	{
-		return rootProvider.root().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().orElse(null);
+		
+		return storageService.provideRoot().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().orElse(null);
 	}
 	
 	public List<Book> searchBooksByTitle(String title)
@@ -42,7 +36,7 @@ public class DAOBook extends ReadWriteLocked
 		return this.read(() ->
 		{
 			GigaQuery<Book> items =
-				rootProvider.root().gigaBooks.query(BookIndices.titleIndex.containsIgnoreCase(title));
+				storageService.provideRoot().gigaBooks.query(BookIndices.titleIndex.containsIgnoreCase(title));
 			
 			if(items.count() > 0)
 			{
@@ -54,61 +48,51 @@ public class DAOBook extends ReadWriteLocked
 	}
 	
 	public synchronized void insert(Book book)
-	{
-		Root root = rootProvider.root();
-		
-		root.gigaBooks.add(book);
+	{		
+		storageService.provideRoot().gigaBooks.add(book);
 		
 		this.write(() ->
 		{
-			root.gigaBooks.store();
+			storageService.provideRoot().gigaBooks.store();
 		});
 	}
 	
 	public synchronized void insertForPM(Book book)
 	{
-		Root root = rootProvider.root();
-		
-		root.gigaBooksForInsert.add(book);
+		storageService.provideRoot().gigaBooksForInsert.add(book);
 		
 		this.write(() ->
 		{
-			root.gigaBooksForInsert.store();
+			storageService.provideRoot().gigaBooksForInsert.store();
 		});
 	}
 	
 	public synchronized void insertBatch(List<Book> books)
 	{
-		Root root = rootProvider.root();
-		
 		this.write(() ->
 		{
-			root.gigaBooks.addAll(books);
-			root.gigaBooks.store();
+			storageService.provideRoot().gigaBooks.addAll(books);
+			storageService.provideRoot().gigaBooks.store();
 		});
 	}
 	
 	public long countBooks()
 	{
-		// TODO Auto-generated method stub
-		return rootProvider.root().gigaBooks.size();
+		return storageService.provideRoot().gigaBooks.size();
 	}
 	
 	public long countBooksInsertPM()
 	{
-		// TODO Auto-generated method stub
-		return rootProvider.root().gigaBooksForInsert.size();
+		return storageService.provideRoot().gigaBooksForInsert.size();
 	}
 	
 	public void flushBooks()
 	{
-		Root root = rootProvider.root();
-		
 		this.write(() ->
 		{
-			root.gigaBooks = GigaMap.New();
+			storageService.provideRoot().gigaBooks = GigaMap.New();
 			
-			final BitmapIndices<Book> indices = root.gigaBooks.index().bitmap();
+			final BitmapIndices<Book> indices = storageService.provideRoot().gigaBooks.index().bitmap();
 			indices.add(BookIndices.titleIndex);
 			indices.add(BookIndices.ISBNIndex);
 			indices.add(BookIndices.pubDateIndex);
@@ -117,13 +101,13 @@ public class DAOBook extends ReadWriteLocked
 			indices.add(BookIndices.authorEmailIndex);
 			indices.setIdentityIndices(BookIndices.ISBNIndex);
 			
-			manager.store(root);
+			storageService.provideStorageManager().store(storageService.provideRoot());
 		});
 	}
 	
 	public void flushInsertPM()
 	{
-		Root root = rootProvider.root();
+		Root root = storageService.provideRoot();
 		
 		this.write(() ->
 		{
@@ -138,7 +122,7 @@ public class DAOBook extends ReadWriteLocked
 			indices.add(BookIndices.authorEmailIndex);
 			indices.setIdentityIndices(BookIndices.ISBNIndex);
 			
-			manager.store(root);
+			storageService.provideStorageManager().store(root);
 		});
 		
 	}

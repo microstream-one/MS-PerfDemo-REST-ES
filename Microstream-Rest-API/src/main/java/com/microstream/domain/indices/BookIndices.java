@@ -2,13 +2,17 @@ package com.microstream.domain.indices;
 
 import java.time.LocalDate;
 
+import org.eclipse.store.gigamap.types.IndexerLocalDate;
+import org.eclipse.store.gigamap.types.IndexerString;
+
 import com.microstream.domain.Book;
 
-import one.microstream.gigamap.IndexerLocalDate;
-import one.microstream.gigamap.IndexerString;
+import jakarta.inject.Singleton;
 
+@Singleton
 public class BookIndices
 {
+	
 	public final static IndexerString<Book> ISBNIndex = new IndexerString.Abstract<Book>()
 	{
 		public String name()
