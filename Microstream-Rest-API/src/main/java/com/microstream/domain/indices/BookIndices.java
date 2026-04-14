@@ -1,9 +1,11 @@
 package com.microstream.domain.indices;
 
-import java.time.LocalDate;
+import java.nio.file.Paths;
 
-import org.eclipse.store.gigamap.types.IndexerLocalDate;
-import org.eclipse.store.gigamap.types.IndexerString;
+import org.eclipse.store.gigamap.lucene.LuceneContext;
+import org.eclipse.store.gigamap.lucene.LuceneIndex;
+import org.eclipse.store.gigamap.types.BinaryIndexerString;
+import org.eclipse.store.gigamap.types.GigaMap;
 
 import com.microstream.domain.Book;
 
@@ -13,7 +15,7 @@ import jakarta.inject.Singleton;
 public class BookIndices
 {
 	
-	public final static IndexerString<Book> ISBNIndex = new IndexerString.Abstract<Book>()
+	public final static BinaryIndexerString<Book> ISBNIndex = new BinaryIndexerString.Abstract<Book>()
 	{
 		public String name()
 		{
@@ -26,74 +28,14 @@ public class BookIndices
 			return entity.getISBN();
 		}
 	};
-	
-	public final static IndexerString<Book> titleIndex = new IndexerString.Abstract<Book>()
-	{
-		public String name()
-		{
-			return "title";
-		}
-		
-		@Override
-		public String getString(final Book entity)
-		{
-			return entity.getTitle();
-		}
-	};
-	
-	public final static IndexerLocalDate<Book> pubDateIndex = new IndexerLocalDate.Abstract<Book>()
-	{
-		public String name()
-		{
-			return "pubDate";
-		}
-		
-		@Override
-		protected LocalDate getLocalDate(final Book entity)
-		{
-			return entity.getPublicationDate();
-		}
-	};
-	
-	public final static IndexerString<Book> authorEmailIndex = new IndexerString.Abstract<Book>()
-	{
-		public String name()
-		{
-			return "authorEmail";
-		}
-		
-		@Override
-		public String getString(final Book entity)
-		{
-			return entity.getAuthor().getMail();
-		}
-	};
-	
-	public final static IndexerString<Book> authorFirstnameIndex = new IndexerString.Abstract<Book>()
-	{
-		public String name()
-		{
-			return "authorFirstname";
-		}
-		
-		@Override
-		public String getString(final Book entity)
-		{
-			return entity.getAuthor().getFirstname();
-		}
-	};
-	
-	public final static IndexerString<Book> authorLastnameIndex = new IndexerString.Abstract<Book>()
-	{
-		public String name()
-		{
-			return "authorLastname";
-		}
-		
-		@Override
-		public String getString(final Book entity)
-		{
-			return entity.getAuthor().getLastname();
-		}
-	};
+
+    public static void registerLuceneIndex(GigaMap<Book> map)
+    {
+        LuceneContext<Book> luceneContext = LuceneContext.New(
+                new BookDocPopulator() // our document populator
+        );
+
+        LuceneIndex.Category<Book> category = LuceneIndex.Category(luceneContext);
+        map.index().register(category);
+    }
 }

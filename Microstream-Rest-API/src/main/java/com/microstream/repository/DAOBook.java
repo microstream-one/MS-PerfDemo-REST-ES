@@ -3,6 +3,7 @@ package com.microstream.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.store.gigamap.lucene.LuceneIndex;
 import org.eclipse.store.gigamap.types.BitmapIndices;
 import org.eclipse.store.gigamap.types.GigaMap;
 import org.eclipse.store.gigamap.types.GigaQuery;
@@ -23,11 +24,9 @@ public class DAOBook extends ReadWriteLocked
 	@Inject private StorageServiceImpl storageService;
 		
 	private int						LIST_LIMIT	= 1000;
-	private int						storeCount	= 1000;
 	
 	public Book getBookByISBN(String isbn)
 	{
-		
 		return storageService.provideRoot().gigaBooks.query(BookIndices.ISBNIndex.is(isbn)).findFirst().orElse(null);
 	}
 	
@@ -35,15 +34,11 @@ public class DAOBook extends ReadWriteLocked
 	{
 		return this.read(() ->
 		{
-			GigaQuery<Book> items =
-				storageService.provideRoot().gigaBooks.query(BookIndices.titleIndex.containsIgnoreCase(title));
-			
-			if(items.count() > 0)
-			{
-				return items.toList(LIST_LIMIT);
-			}
-			
-			return new ArrayList<>();
+            LuceneIndex<Book> luceneIndex = storageService.provideRoot().gigaBooks.index().get(LuceneIndex.class);
+
+            List<Book> result = luceneIndex.query("title:" + title);
+
+			return result;
 		});
 	}
 	
@@ -93,12 +88,7 @@ public class DAOBook extends ReadWriteLocked
 			storageService.provideRoot().gigaBooks = GigaMap.New();
 			
 			final BitmapIndices<Book> indices = storageService.provideRoot().gigaBooks.index().bitmap();
-			indices.add(BookIndices.titleIndex);
 			indices.add(BookIndices.ISBNIndex);
-			indices.add(BookIndices.pubDateIndex);
-			indices.add(BookIndices.authorFirstnameIndex);
-			indices.add(BookIndices.authorLastnameIndex);
-			indices.add(BookIndices.authorEmailIndex);
 			indices.setIdentityIndices(BookIndices.ISBNIndex);
 			
 			storageService.provideStorageManager().store(storageService.provideRoot());
@@ -114,12 +104,7 @@ public class DAOBook extends ReadWriteLocked
 			root.gigaBooksForInsert = GigaMap.New();
 			
 			final BitmapIndices<Book> indices = root.gigaBooksForInsert.index().bitmap();
-			indices.add(BookIndices.titleIndex);
 			indices.add(BookIndices.ISBNIndex);
-			indices.add(BookIndices.pubDateIndex);
-			indices.add(BookIndices.authorFirstnameIndex);
-			indices.add(BookIndices.authorLastnameIndex);
-			indices.add(BookIndices.authorEmailIndex);
 			indices.setIdentityIndices(BookIndices.ISBNIndex);
 			
 			storageService.provideStorageManager().store(root);

@@ -26,21 +26,13 @@ public class Root
 		super();
 		
 		final BitmapIndices<Book> indices = gigaBooks.index().bitmap();
-		indices.add(BookIndices.titleIndex);
 		indices.add(BookIndices.ISBNIndex);
-		indices.add(BookIndices.pubDateIndex);
-		indices.add(BookIndices.authorFirstnameIndex);
-		indices.add(BookIndices.authorLastnameIndex);
-		indices.add(BookIndices.authorEmailIndex);
+        BookIndices.registerLuceneIndex(gigaBooks);
 		indices.setIdentityIndices(BookIndices.ISBNIndex);
 		
 		final BitmapIndices<Book> indicesForInsert = gigaBooksForInsert.index().bitmap();
-		indicesForInsert.add(BookIndices.titleIndex);
 		indicesForInsert.add(BookIndices.ISBNIndex);
-		indicesForInsert.add(BookIndices.pubDateIndex);
-		indicesForInsert.add(BookIndices.authorFirstnameIndex);
-		indicesForInsert.add(BookIndices.authorLastnameIndex);
-		indicesForInsert.add(BookIndices.authorEmailIndex);
+        BookIndices.registerLuceneIndex(gigaBooks);
 		indicesForInsert.setIdentityIndices(BookIndices.ISBNIndex);
 	}
 	
